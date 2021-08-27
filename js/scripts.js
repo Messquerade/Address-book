@@ -63,13 +63,28 @@ function displayContactDetails(addressBookToDisplay) {
 }
 
 function attachContactListeners() {
-  $("ul#contacts").on("click", "li", function() {
-    showContact(this.id);
+  $("ul#contacts").on("mousedown", "li", function(event) {
+    if(event.which === 3) {
+      addressBook.deleteContact(this.id);
+    $("#show-contact").hide();
+    displayContactDetails(addressBook);
+    } else {
+      showContact(this.id);
+    }
   });
+
   $("#buttons").on("click", ".deleteButton", function() {
     addressBook.deleteContact(this.id);
     $("#show-contact").hide();
     displayContactDetails(addressBook);
+  });
+  $(window).keypress(function(event) {
+    console.log(event);
+    if(event.which === 100) {
+      addressBook.deleteContact(1);
+    $("#show-contact").hide();
+    displayContactDetails(addressBook);
+    };
   });
 }
 
@@ -105,11 +120,10 @@ $(document).ready(function() {
     $("input#new-last-name").val("");
     $("input#new-phone-number").val("");
     $("input#new-work-email").val("");
-    $("input#new-work-email").val("");
+    $("input#new-home-email").val("");
 
     let newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedWorkEmailAddress, inputtedHomeEmailAddress);
     addressBook.addContact(newContact);
     displayContactDetails(addressBook);
-    console.log(newContact);
   });
 });
